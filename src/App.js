@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react'
+import Navbar from './components/Navbar/Navbar.jsx'
+import Input from './components/Input/Input.jsx'
+import Preview from './components/Preview/Preview.jsx'
+import './App.css'
+import axios from 'axios'
 
 function App() {
+
+  const [metaData, setmetaData] = useState({})
+  const [showPreview, setshowPreview] = useState(false)
+
+  const getMetaData = (url)=>{
+    const data = {"url":url};
+    console.log(data);
+    axios.post("https://just-preview.herokuapp.com/meta-data",data).then((res)=>{
+       if(res.data.result.status==1){
+        setmetaData(res.data.result.data)
+        setshowPreview(true);
+       }
+       else{
+        setshowPreview(false)
+       }
+    }).catch((err)=>{
+        console.log(err)
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    console.log(metaData),
+    <>
+      <Navbar/>
+      <div className='container'>
+           <Input getMetaData={getMetaData}/>
+      </div>
+      <div className='container'>
+      {showPreview && <Preview data={metaData}/> }
+      </div>
+      
+    </>
+  )
 }
 
-export default App;
+export default App
