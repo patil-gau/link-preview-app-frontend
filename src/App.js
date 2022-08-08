@@ -13,7 +13,7 @@ function App() {
   const getMetaData = (url)=>{
     const data = {"url":url};
     console.log(data);
-    axios.post("http://localhost:8000/meta-data",data).then((res)=>{
+    axios.post("https://just-preview.herokuapp.com",data).then((res)=>{
        if(res.data.result.status==1){
         setmetaData(res.data.result.data)
         setshowPreview(true);
